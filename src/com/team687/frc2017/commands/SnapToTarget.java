@@ -23,7 +23,7 @@ public class SnapToTarget extends Command {
 	private NetworkTable m_table;
 	private double m_angleToTurn;
 	private double m_historicalAngle;
-	private double m_error;
+	private double m_desiredAngle;
 	private boolean m_isAligned;
 	private NerdyPID m_rotPID;
 	
@@ -63,8 +63,8 @@ public class SnapToTarget extends Command {
 	@Override
 	protected void execute() {
 		visionUpdate();
-		m_rotPID.setDesired(m_error);
-		double power = m_rotPID.calculate(Robot.drive.getCurrentYaw() - m_historicalAngle);
+		m_rotPID.setDesired(m_desiredAngle);
+		double power = m_rotPID.calculate(Robot.drive.getCurrentYaw());
 		Robot.drive.setPower(power, -power);
 	}
 
@@ -90,11 +90,11 @@ public class SnapToTarget extends Command {
 		m_processingTime = m_table.getDouble("PROCESSED_TIME");
 		SmartDashboard.putNumber("Processing Time (seconds)", m_processingTime);
 		
-		m_angleToTurn = NerdyMath.boundAngle(m_angleToTurn);
+//		m_angleToTurn = NerdyMath.boundAngle(m_angleToTurn); // most likely unnecessary
 		m_historicalAngle = Robot.drive.timeMachineYaw(m_processingTime);
 		SmartDashboard.putNumber("Historical angle at timestamp of frame captured", m_historicalAngle);
-		m_error = m_angleToTurn - m_historicalAngle;
-		SmartDashboard.putNumber("Error from Target", m_error);
+		m_desiredAngle = NerdyMath.boundAngle(m_angleToTurn + m_historicalAngle);
+		SmartDashboard.putNumber("Desired Angle From Vision", m_desiredAngle);
 		
 		m_isAligned = m_table.getBoolean("IS_ALIGNED");
 		SmartDashboard.putBoolean("Aligned to vision target", m_isAligned);

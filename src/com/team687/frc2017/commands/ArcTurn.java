@@ -9,6 +9,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/**
+ * Arc turn
+ *
+ * @author tedfoodlin
+ *
+ */
+
 public class ArcTurn extends Command {
 	
 	private double m_angle;
