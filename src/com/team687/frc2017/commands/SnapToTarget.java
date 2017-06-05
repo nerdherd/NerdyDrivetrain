@@ -2,12 +2,10 @@ package com.team687.frc2017.commands;
 
 import com.team687.frc2017.Constants;
 import com.team687.frc2017.Robot;
-import com.team687.frc2017.utilities.NerdyMath;
 import com.team687.frc2017.utilities.NerdyPID;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -20,20 +18,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SnapToTarget extends Command {
 	
-	private NetworkTable m_table;
-	private double m_angleToTurn;
-	private double m_historicalAngle;
-	private double m_desiredAngle;
-	private boolean m_isAligned;
 	private NerdyPID m_rotPID;
 	
 	private double m_startTime;
-	private double m_processingTime;
 	private double m_timeout = 6.87;
 	private double m_counter;
 
 	public SnapToTarget() {
-		m_timeout = 6.87; // default timeout is 5 seconds
+		m_timeout = 6.87; // default timeout is 6.87 seconds
 		
 		// subsystem dependencies
 		requires(Robot.drive);
@@ -63,10 +55,14 @@ public class SnapToTarget extends Command {
 
 	@Override
 	protected void execute() {
-		visionUpdate();
-		m_rotPID.setDesired(m_desiredAngle);
-		double error = m_desiredAngle - Robot.drive.getCurrentYaw();
+		double angleToTurn = Robot.visionAdapter.getAngleToTurn();
+		double historicalAngle = Robot.drive.timeMachineYaw(Robot.visionAdapter.getProcessedTime());
+		double desiredAngle = angleToTurn + historicalAngle;
+		
+		m_rotPID.setDesired(desiredAngle);
+		double error = desiredAngle - Robot.drive.getCurrentYaw();
 		SmartDashboard.putNumber("Angle Error", error);
+		
 		double power = m_rotPID.calculate(Robot.drive.getCurrentYaw());
 		if (Math.abs(error) <= Constants.kDriveRotationTolerance) {
 			m_counter += 1;
@@ -89,23 +85,6 @@ public class SnapToTarget extends Command {
 	@Override
 	protected void interrupted() {
 		end();
-	}
-	
-	@SuppressWarnings("deprecation")
-	private void visionUpdate() {
-		m_angleToTurn = m_table.getDouble("ANGLE_TO_TURN");
-		SmartDashboard.putNumber("Angle from NerdyVision", m_angleToTurn);
-		m_processingTime = m_table.getDouble("PROCESSED_TIME");
-		SmartDashboard.putNumber("Processing Time (seconds)", m_processingTime);
-		
-//		m_angleToTurn = NerdyMath.boundAngle(m_angleToTurn); // most likely unnecessary
-		m_historicalAngle = Robot.drive.timeMachineYaw(m_processingTime);
-		SmartDashboard.putNumber("Historical angle at timestamp of frame captured", m_historicalAngle);
-		m_desiredAngle = NerdyMath.boundAngle(m_angleToTurn + m_historicalAngle);
-		SmartDashboard.putNumber("Desired Angle From Vision", m_desiredAngle);
-		
-		m_isAligned = m_table.getBoolean("IS_ALIGNED");
-		SmartDashboard.putBoolean("Aligned to vision target", m_isAligned);
 	}
 	
 }

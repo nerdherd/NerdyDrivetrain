@@ -1,75 +1,50 @@
-package com.team687.frc2017.commands;
+package com.team687.frc2017.commands.tests;
 
 import com.team687.frc2017.Constants;
 import com.team687.frc2017.Robot;
 import com.team687.frc2017.utilities.NerdyPID;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-/**
- * Approach a target based on vision and gyro
- * Used with NerdyVision
- *
- * @author tedfoodlin
- *
- */
-
-public class ApproachTarget extends Command {
+public class TestVisionAlign extends Command {
 	
 	private NerdyPID m_rotPID;
-	
-	private double m_startTime;
-	private double m_timeout = 6.87;
-	
-	public ApproachTarget() {
-		m_timeout = 6.87; // default timeout is 5 seconds
-		
-		// subsystem dependencies
-		requires(Robot.drive);
-	}
-	
-	/**
-	 * @param timeout
-	 */
-	public ApproachTarget(double timeout) {
-		m_timeout = timeout;
-		
-		// subsystem dependencies
-		requires(Robot.drive);
-	}
+
+    public TestVisionAlign() {
+    	// subsystem dependencies
+        requires(Robot.drive);
+    }
 
 	@Override
 	protected void initialize() {
-		SmartDashboard.putString("Current Command", "ApproachTarget");
+		SmartDashboard.putString("Current Command", "SnapToTarget");
 		m_rotPID = new NerdyPID(Constants.kRotP, Constants.kRotI, Constants.kRotD);
 		m_rotPID.setOutputRange(Constants.kMinRotPower, Constants.kMaxRotPower);
 		
 		Robot.drive.stopDrive();
-		Robot.drive.shiftDown();
-		
-		m_startTime = Timer.getFPGATimestamp();
+		Robot.drive.shiftUp();
 	}
 
 	@Override
 	protected void execute() {
 		double angleToTurn = Robot.visionAdapter.getAngleToTurn();
 		double historicalAngle = Robot.drive.timeMachineYaw(Robot.visionAdapter.getProcessedTime());
+		SmartDashboard.putNumber("Historical angle " + Robot.visionAdapter.getProcessedTime() + " seconds ago (test)", historicalAngle);
 		double desiredAngle = angleToTurn + historicalAngle;
+		SmartDashboard.putNumber("Desired angle (absolute) from vision (test)", desiredAngle);
 		
 		m_rotPID.setDesired(desiredAngle);
 		double error = desiredAngle - Robot.drive.getCurrentYaw();
-		SmartDashboard.putNumber("Angle Error", error);
+		SmartDashboard.putNumber("Angle error from vision (test)", error);
 		
-		double rotPower = m_rotPID.calculate(Robot.drive.getCurrentYaw());
-		double straightPower = 0.330;
-		Robot.drive.setPower(straightPower + rotPower, straightPower - rotPower);
+		double power = m_rotPID.calculate(Robot.drive.getCurrentYaw());
+		SmartDashboard.putNumber("Vision Rotational PID output (test)", power);
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return Timer.getFPGATimestamp() - m_startTime > m_timeout;
+		return false;
 	}
 
 	@Override
@@ -81,5 +56,5 @@ public class ApproachTarget extends Command {
 	protected void interrupted() {
 		end();
 	}
-
+	
 }
