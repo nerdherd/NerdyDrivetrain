@@ -30,6 +30,7 @@ public class SnapToTarget extends Command {
 	private double m_startTime;
 	private double m_processingTime;
 	private double m_timeout = 6.87;
+	private double m_counter;
 
 	public SnapToTarget() {
 		m_timeout = 6.87; // default timeout is 5 seconds
@@ -64,13 +65,20 @@ public class SnapToTarget extends Command {
 	protected void execute() {
 		visionUpdate();
 		m_rotPID.setDesired(m_desiredAngle);
+		double error = m_desiredAngle - Robot.drive.getCurrentYaw();
+		SmartDashboard.putNumber("Angle Error", error);
 		double power = m_rotPID.calculate(Robot.drive.getCurrentYaw());
+		if (Math.abs(error) <= Constants.kDriveRotationTolerance) {
+			m_counter += 1;
+		}	else	{
+			m_counter = 0;
+		}
 		Robot.drive.setPower(power, -power);
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return Timer.getFPGATimestamp() - m_startTime > m_timeout || m_isAligned;
+		return m_counter > Constants.kDriveRotationOscillationCount || Timer.getFPGATimestamp() - m_startTime > m_timeout;
 	}
 
 	@Override
