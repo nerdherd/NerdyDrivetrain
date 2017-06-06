@@ -7,6 +7,13 @@ import com.team687.frc2017.utilities.NerdyPID;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/**
+ * Testing vision alignment
+ *
+ * @author tedfoodlin
+ *
+ */
+
 public class TestVisionAlign extends Command {
 	
 	private NerdyPID m_rotPID;

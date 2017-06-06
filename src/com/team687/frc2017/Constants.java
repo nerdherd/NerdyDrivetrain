@@ -12,6 +12,10 @@ public class Constants {
 	public final static double kDistP = 0;
 	public final static double kDistI = 0;
 	public final static double kDistD = 0;
+	public final static double kMinDistPower = 0;
+	public final static double kMaxDistPower = 1.0;
+	public final static double kDriveDistanceTolerance = 2.056;
+	public final static double kDriveDistanceOscillationCount = 5;
 	
 	// Rotation
 	public final static double kRotP = 0;
@@ -20,7 +24,7 @@ public class Constants {
 	public final static double kMinRotPower = 0;
 	public final static double kMaxRotPower = 1.0;
 	// Tolerance for closed loop DriveTurnToAngle command in degrees
-	public final static double kDriveRotationTolerance = 1;
+	public final static double kDriveRotationTolerance = 0.687;
 	public final static double kDriveRotationOscillationCount = 5;
 	
 	// Motion Profiling and Trajectories
@@ -36,7 +40,7 @@ public class Constants {
 	public final static int kTicksPerRev = 0;
 	public final static double kWheelDiameter = 4/12;
 	
-	public final static double kDriveDistanceTolerance = 0.3; //Magic units
+//	public final static double kDriveDistanceTolerance = 0.3; //Magic units
 	public final static double kDriveFeetToEncoderUnitsR = 4.388*3/(Math.PI);
 	public final static double kDriveFeetToEncoderUnitsL = 4.487*3/(Math.PI);
 	public final static double kDriveStraightP = 0.018;
