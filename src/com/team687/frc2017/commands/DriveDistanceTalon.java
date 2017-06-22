@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * Drive a trajectory with built-in Talon motion profiling
+ * Drive a straight distance with built-in Talon motion profiling
  * 
  * @author tedfoodlin
  * 
@@ -41,6 +41,9 @@ public class DriveDistanceTalon extends Command {
 	@Override
 	protected void initialize() {
 		SmartDashboard.putString("Current Command", "DriveDistanceTalon");
+		Robot.drive.stopDrive();
+		Robot.drive.resetEncoders();
+		Robot.drive.shiftDown();
 		Robot.drive.setValueMotionProfileOutput(CANTalon.SetValueMotionProfile.Disable);
 		
 		Robot.drive.changeMotionControlFramePeriod(5);
@@ -49,6 +52,7 @@ public class DriveDistanceTalon extends Command {
 		m_motionProfile = new MotionProfileGenerator(Constants.kMaxVelocity, Constants.kMaxAcceleration, -Constants.kMaxAcceleration);
 		m_motionProfile.generateProfile(m_distance);
 		
+    	Robot.drive.clearMotionProfileTrajectories();
 		CANTalon.TrajectoryPoint point = new CANTalon.TrajectoryPoint();
 		for (int i = 0; i < m_motionProfile.getTotalPoints(); i++) {
 			point.velocity = m_motionProfile.readVelocity(i);
@@ -67,10 +71,6 @@ public class DriveDistanceTalon extends Command {
 			
 			Robot.drive.pushTrajectoryPoint(point);
 		}
-		
-		Robot.drive.stopDrive();
-		Robot.drive.resetEncoders();
-		Robot.drive.shiftDown();
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class DriveDistanceTalon extends Command {
 
 	@Override
 	protected boolean isFinished() {
-		return Math.abs(Robot.drive.getDrivetrainPosition() - m_distance) <= 1;
+		return Robot.drive.isMotionProfileFinished();
 	}
 
 	@Override

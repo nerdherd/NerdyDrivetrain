@@ -50,6 +50,7 @@ public class Constants {
 	public final static double kSensitivityLow = 0.75;
 	public final static double kLeftJoystickDeadband = 0.02;
 	public final static double kRightJoystickDeadband = 0.02;
+	public final static double kJoystickDeadband = 0.02;
 	
 	public final static double kShiftCurrent = 20; // Amps Per Talon
 	public final static double kShiftAcceleration = 2; // Gotta make sure this is right

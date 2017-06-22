@@ -98,25 +98,31 @@ public class OI {
 	}
 	
 	/**
-	 * @return input power from left drive joystick (-1.0 to +1.0) with compensation for deadband
+	 * @return input power from left drive joystick Y (-1.0 to +1.0)
 	 */
-	public double getDriveJoyL() {
-		double input = driveJoyLeft.getY();
-		if (Math.abs(input) < Constants.kLeftJoystickDeadband) {
-			input = 0;
-		}
-		return input;
+	public double getDriveJoyLeftY() {
+		return driveJoyLeft.getY();
 	}
 	
 	/**
-	 * @return input power from right drive joystick (-1.0 to +1.0) with compensation for deadband
+	 * @return input power from right drive joystick Y (-1.0 to +1.0)
 	 */
-	public double getDriveJoyR() {
-		double input = driveJoyRight.getY();
-		if (Math.abs(input) < Constants.kRightJoystickDeadband) {
-			input = 0;
-		}
-		return input;
+	public double getDriveJoyRightY() {
+		return driveJoyRight.getY();
+	}
+	
+	/**
+	 * @return input power from left drive joystick X (-1.0 to +1.0)
+	 */
+	public double getDriveJoyLeftX() {
+		return driveJoyLeft.getX();
+	}
+	
+	/**
+	 * @return input power from right drive joystick X (-1.0 to +1.0)
+	 */
+	public double getDriveJoyRightX() {
+		return driveJoyRight.getX();
 	}
 	
 	/**
@@ -124,6 +130,13 @@ public class OI {
 	 */
 	public double getThrottleR() {
 		return (driveJoyRight.getThrottle() + 1) / 2;
+	}
+	
+	/**
+	 * @return input throttle from left drive josytick
+	 */
+	public double getThrottleL() {
+		return (driveJoyLeft.getThrottle() + 1) / 2;
 	}
 	
 	/**
