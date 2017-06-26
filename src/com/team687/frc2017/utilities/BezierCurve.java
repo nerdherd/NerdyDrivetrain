@@ -93,6 +93,14 @@ public class BezierCurve {
 		}
 	}
 	
+	public ArrayList<Double> getXPoints() {
+		return m_xPoints;
+	}
+	
+	public ArrayList<Double> getYPoints() {
+		return m_yPoints;
+	}
+	
 	public ArrayList<Double> getArcLength() {
 		return m_arcLength;
 	}

@@ -160,7 +160,7 @@ public class Drive extends Subsystem {
 	}
 	
 	public double getDrivetrainPosition() {
-		return (getLeftPosition() + getRightPosition());
+		return (getLeftPosition() + getRightPosition()/2);
 	}
 	
 	public int getDrivetrainTicks() {
