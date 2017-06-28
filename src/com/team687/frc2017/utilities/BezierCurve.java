@@ -48,19 +48,19 @@ public class BezierCurve {
 		m_ay = m_yVal[3] - m_yVal[0] - m_cy - m_by;
 	}
 	
-	public double calculateX(int counter) {
+	public double calculateX(double counter) {
 		return m_ax * Math.pow(counter, 3) + m_bx * Math.pow(counter, 2) + m_cx * counter + m_xVal[0];
 	}
 	
-	public double calculateY(int counter) {
+	public double calculateY(double counter) {
 		return m_ay * Math.pow(counter, 3) + m_by * Math.pow(counter, 2) + m_cy * counter + m_yVal[0];
 	}
 	
 	public void calculatePoints() {
 		m_xPoints.clear();
 		m_yPoints.clear();
-		
-		for (int i = 0; i <= 1241; i++) {
+		double step = 1241;
+		for (double i = 0; i <= 1; i += (1 / step)) {
 			m_xPoints.add(calculateX(i));
 			m_yPoints.add(calculateY(i));
 		}
@@ -70,6 +70,8 @@ public class BezierCurve {
 		calculateParams();
 		calculatePoints();
 		
+		m_heading.clear();
+		m_arcLength.clear();
 		for (int i = 0; i < m_xPoints.size() - 1; i++) {
 			double xDelta = m_xPoints.get(i + 1) - m_xPoints.get(i);
 			double yDelta = m_yPoints.get(i + 1) - m_yPoints.get(i);
