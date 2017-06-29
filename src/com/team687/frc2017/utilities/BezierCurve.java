@@ -2,8 +2,11 @@ package com.team687.frc2017.utilities;
 
 import java.util.ArrayList;
 
+import com.team687.frc2017.Constants;
+
 /**
  * Bezier curve generation
+ * Inspired by 1241
  *
  * @author tedfoodlin
  *
@@ -59,8 +62,7 @@ public class BezierCurve {
 	public void calculatePoints() {
 		m_xPoints.clear();
 		m_yPoints.clear();
-		double step = 1241;
-		for (double i = 0; i <= 1; i += (1 / step)) {
+		for (double i = 0; i <= 1; i += (1 / Constants.kBezierStep)) {
 			m_xPoints.add(calculateX(i));
 			m_yPoints.add(calculateY(i));
 		}
@@ -109,5 +111,12 @@ public class BezierCurve {
 	
 	public ArrayList<Double> getHeading() {
 		return m_heading;
+	}
+	
+	public void clearAll() {
+		m_xPoints.clear();
+		m_yPoints.clear();
+		m_arcLength.clear();
+		m_heading.clear();
 	}
 }

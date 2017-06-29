@@ -40,6 +40,10 @@ public class Constants {
 	public final static int kTicksPerRev = 0;
 	public final static double kWheelDiameter = 4/12;
 	
+	public final static double kBezierStep = 16;
+	public final static double kBezierMinStraightPow = 0.1241;
+	public final static double kBezierMaxStraightPow = 0.5172;
+	
 //	public final static double kDriveDistanceTolerance = 0.3; //Magic units
 	public final static double kDriveFeetToEncoderUnitsR = 4.388*3/(Math.PI);
 	public final static double kDriveFeetToEncoderUnitsL = 4.487*3/(Math.PI);
