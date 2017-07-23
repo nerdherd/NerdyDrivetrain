@@ -2,46 +2,32 @@ package com.team687.frc2017.commands;
 
 import com.team687.frc2017.Constants;
 import com.team687.frc2017.Robot;
-import com.team687.frc2017.utilities.NerdyPID;
+import com.team687.frc2017.VisionAdapter;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * Turn to a specified angle (no vision, absolute)
+ * Live vision tracking (follows target around, no end)
  * 
  * @author tedfoodlin
- * 
+ *
  */
 
-public class TurnToAngle extends Command {
+public class LiveVisionTracking extends Command {
 	
 	private double m_angleToTurn;
 	private double m_startTime;
 	private double m_timeout;
-	private double error;
 	
 //	private NerdyPID m_rotPID;
 	
 	/**
 	 * @param angle
 	 */
-	public TurnToAngle(double angle) {
-		m_angleToTurn = angle;
+	public LiveVisionTracking() {
 		m_timeout = 10; // default timeout is 10 seconds
-		
-		// subsystem dependencies
-		requires(Robot.drive);
-	}
-	
-	/**
-	 * @param angle
-	 * @param timeout
-	 */
-	public TurnToAngle(double angle, double timeout) {
-		m_angleToTurn = angle;
-		m_timeout = timeout;
 		
 		// subsystem dependencies
 		requires(Robot.drive);
@@ -63,16 +49,22 @@ public class TurnToAngle extends Command {
 	@Override
 	protected void execute() {
 		double robotAngle = (360-Robot.drive.getCurrentYaw()) % 360;
-		error = m_angleToTurn - robotAngle;
+		double relativeAngleError = VisionAdapter.getInstance().getAngleToTurn();
+		double processingTime = VisionAdapter.getInstance().getProcessedTime();
+		double absoluteDesiredAngle = relativeAngleError + Robot.drive.timeMachineYaw(processingTime);
+		double error = absoluteDesiredAngle - robotAngle;
 		SmartDashboard.putNumber("Angle Error", error);
 //		double power = m_rotPID.calculate(Robot.drive.getCurrentYaw());
 		double power = Constants.kRotP * error;
+		if(Math.abs(error) <= Constants.kDriveRotationDeadband) {
+			power = 0;
+		}
 		Robot.drive.setPower(power, power);
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return Math.abs(error) <= Constants.kDriveRotationTolerance || Timer.getFPGATimestamp() - m_startTime > m_timeout;
+		return false;
 	}
 
 	@Override

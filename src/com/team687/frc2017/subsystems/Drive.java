@@ -2,7 +2,6 @@ package com.team687.frc2017.subsystems;
 
 import com.ctre.CANTalon;
 import com.ctre.CANTalon.TalonControlMode;
-import com.team687.frc2017.Constants;
 import com.team687.frc2017.Robot;
 import com.team687.frc2017.RobotMap;
 import com.team687.frc2017.commands.*;
@@ -12,6 +11,7 @@ import com.team687.lib.kauailabs.sf2.frc.navXSensor;
 import com.team687.lib.kauailabs.sf2.orientation.OrientationHistory;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -51,7 +51,7 @@ public class Drive extends Subsystem {
     	
     	m_shifter = new DoubleSolenoid(RobotMap.kShifterID1, RobotMap.kShifterID2);
         
-    	m_nav = new AHRS(RobotMap.navID);
+    	m_nav = new AHRS(SerialPort.Port.kMXP);
         m_navxsensor = new navXSensor(m_nav, "Drivetrain Orientation");
         m_orientationHistory = new OrientationHistory(m_navxsensor, m_nav.getRequestedUpdateRate() * 10);
     } 
@@ -67,27 +67,11 @@ public class Drive extends Subsystem {
 	}
 	
 	public double addLeftSensitivity(double input) {
-		double b = Constants.kLeftJoystickDeadband;
-		double a = Robot.oi.getThrottleL();
-		double output = 0;
-		if (input >= 0) {
-			output = b + (1 - b) * (a * Math.pow(input, 3) + (1 - a) * input);
-		} else if (input < 0) {
-			output = -b + (1 - b) * (a * Math.pow(input, 3) + (1 - a) * input);
-		}
-		return output;
+		return NerdyMath.addSensitivity(input, Robot.oi.getThrottleL());
 	}
 	
 	public double addRightSensitivity(double input) {
-		double b = Constants.kRightJoystickDeadband;
-		double a = Robot.oi.getThrottleR();
-		double output = 0;
-		if (input >= 0) {
-			output = b + (1 - b) * (a * Math.pow(input, 3) + (1 - a) * input);
-		} else if (input < 0) {
-			output = -b + (1 - b) * (a * Math.pow(input, 3) + (1 - a) * input);
-		}
-		return output;
+		return NerdyMath.addSensitivity(input, Robot.oi.getThrottleR());
 	}
     
     /**
@@ -204,13 +188,13 @@ public class Drive extends Subsystem {
 		m_leftMaster.changeControlMode(TalonControlMode.PercentVbus);
 		m_rightMaster.changeControlMode(TalonControlMode.PercentVbus);
 	 	
-	 	m_leftMaster.set(NerdyMath.limit(lPow, 1.0));
-	 	m_leftSlave1.set(m_leftMaster.getDeviceID());
-	 	m_leftSlave2.set(m_leftMaster.getDeviceID());
+	 	m_leftMaster.set(lPow);
+	 	m_leftSlave1.set(lPow);
+	 	m_leftSlave2.set(lPow);
 	 	
-	 	m_rightMaster.set(NerdyMath.limit(rPow, 1.0));
-	 	m_rightSlave1.set(m_rightMaster.getDeviceID());
-	 	m_rightSlave2.set(m_rightMaster.getDeviceID());
+	 	m_rightMaster.set(rPow);
+	 	m_rightSlave1.set(rPow);
+	 	m_rightSlave2.set(rPow);
 	 }
 	 
 	public void processMotionProfileBuffer() {

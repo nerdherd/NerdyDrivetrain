@@ -38,6 +38,27 @@ public class NerdyMath {
     }
     
     /**
+     * Add joystick sensitivity (Ether method)
+     * If throttle is 0, joystick output is linear
+     * If throttle is 1, joystick output is cubic
+     * You can adjust in between
+     * 
+     * @param input
+     * @param throttle
+     */
+	public static double addSensitivity(double input, double throttle) {
+		double b = Constants.kLeftJoystickDeadband;
+		double a = throttle;
+		double output = 0;
+		if (input >= 0) {
+			output = b + (1 - b) * (a * Math.pow(input, 3) + (1 - a) * input);
+		} else if (input < 0) {
+			output = -b + (1 - b) * (a * Math.pow(input, 3) + (1 - a) * input);
+		}
+		return output;
+	}
+    
+    /**
      * Normalizes the array to -1 or 1
      * 
      * @param values	The values
@@ -69,6 +90,15 @@ public class NerdyMath {
     public static double boundAngle(double angleDegrees) {
 		angleDegrees = (360 - angleDegrees) % 360;
         return angleDegrees;
+    }
+    
+    /**
+     * Bound angle error
+     */
+    public static double boundAngleError(double error) {
+		error = (error > 180) ? error-360 : error;
+		error = (error < -180) ? error+360 : error;
+		return error;
     }
 	
 }

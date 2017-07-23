@@ -23,16 +23,16 @@ public class TestRotPID extends Command {
         requires(Robot.drive);
     }
 
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void initialize() {
 		SmartDashboard.putString("Current Command", "TestRotPID");
 		
-		SmartDashboard.putDouble("Rot P (test, editable)", Constants.kRotP);
-		SmartDashboard.putDouble("Rot I (test, editable)", Constants.kRotI);
-		SmartDashboard.putDouble("Rot D (test, editable)", Constants.kRotD);
-		SmartDashboard.putDouble("Rot Min Power (test, editable)", Constants.kMinRotPower);
-		SmartDashboard.putDouble("Rot Max Power (test, editable)", Constants.kMaxRotPower);
+		SmartDashboard.putNumber("Desired Yaw (test, editable)", 0);
+		SmartDashboard.putNumber("Rot P (test, editable)", Constants.kRotP);
+		SmartDashboard.putNumber("Rot I (test, editable)", Constants.kRotI);
+		SmartDashboard.putNumber("Rot D (test, editable)", Constants.kRotD);
+		SmartDashboard.putNumber("Rot Min Power (test, editable)", Constants.kMinRotPower);
+		SmartDashboard.putNumber("Rot Max Power (test, editable)", Constants.kMaxRotPower);
 		m_rotPID = new NerdyPID(Constants.kRotP, Constants.kRotI, Constants.kRotD);
 		m_rotPID.setOutputRange(Constants.kMinRotPower, Constants.kMaxRotPower);
 		
@@ -47,8 +47,6 @@ public class TestRotPID extends Command {
 		SmartDashboard.putNumber("Actual Yaw (test)", actualAngle);
 		double desiredAngle = SmartDashboard.getNumber("Desired Yaw (test, editable)");
 		double angleError = desiredAngle - actualAngle;
-		angleError = (angleError > 180) ? angleError-360 : angleError;
-		angleError = (angleError < -180) ? angleError+360 : angleError;
 		SmartDashboard.putNumber("Error Yaw (test)", angleError);
 		
 		double kP = SmartDashboard.getNumber("Rot P (test, editable)");
