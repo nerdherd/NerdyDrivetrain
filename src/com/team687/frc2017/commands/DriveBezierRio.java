@@ -28,73 +28,75 @@ public class DriveBezierRio extends Command {
     private boolean m_pathIsFinished;
 
     public DriveBezierRio(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3) {
-    	m_path = new BezierCurve(x0, y0, x1, y1, x2, y2, x3, y3);
+	m_path = new BezierCurve(x0, y0, x1, y1, x2, y2, x3, y3);
     }
 
     @Override
     protected void initialize() {
-		SmartDashboard.putString("Current Command", "DriveBezierRio");
-		Robot.drive.stopDrive();
-		Robot.drive.resetEncoders();
-		Robot.drive.shiftDown();
-	
-		m_path.calculateBezier();
-		m_heading = m_path.getHeading();
-		m_arcLength = m_path.getArcLength();
-	
-		// m_rotPID = new NerdyPID(Constants.kRotP, Constants.kRotI, Constants.kRotD);
-		// m_rotPID.setGyro(true);
-		// m_rotPID.setOutputRange(Constants.kMinRotPower, Constants.kMaxRotPower);
-		//
-		// m_distPID = new NerdyPID(Constants.kDistP, Constants.kDistI,
-		// Constants.kDistD);
-		// m_distPID.setGyro(false);
-		// m_distPID.setOutputRange(Constants.kBezierMinStraightPow,
-		// Constants.kBezierMaxStraightPow);
-		// m_distPID.setDesired(m_arcLength.get(m_arcLength.size() - 1));
-	
-		m_counter = 0;
-		m_pathIsFinished = false;
+	SmartDashboard.putString("Current Command", "DriveBezierRio");
+	Robot.drive.stopDrive();
+	Robot.drive.resetEncoders();
+	Robot.drive.shiftDown();
+
+	m_path.calculateBezier();
+	m_heading = m_path.getHeading();
+	m_arcLength = m_path.getArcLength();
+
+	// m_rotPID = new NerdyPID(Constants.kRotP, Constants.kRotI, Constants.kRotD);
+	// m_rotPID.setGyro(true);
+	// m_rotPID.setOutputRange(Constants.kMinRotPower, Constants.kMaxRotPower);
+	//
+	// m_distPID = new NerdyPID(Constants.kDistP, Constants.kDistI,
+	// Constants.kDistD);
+	// m_distPID.setGyro(false);
+	// m_distPID.setOutputRange(Constants.kBezierMinStraightPow,
+	// Constants.kBezierMaxStraightPow);
+	// m_distPID.setDesired(m_arcLength.get(m_arcLength.size() - 1));
+
+	m_counter = 0;
+	m_pathIsFinished = false;
     }
 
     @Override
     protected void execute() {
-		if (m_counter < m_arcLength.size()) {
-		    if (Robot.drive.getDrivetrainTicks() < m_arcLength.get(m_counter)) {
-			// m_rotPID.setDesired(m_heading.get(m_counter));
-			// rotPow = m_rotPID.calculate(Robot.drive.getCurrentYaw());
-			// straightPow = m_distPID.calculate(Robot.drive.getDrivetrainPosition());
-	
-			double robotAngle = (360 - Robot.drive.getCurrentYaw()) % 360;
-			double error = m_heading.get(m_counter) - robotAngle;
-			double straightPower = 0.5;
-			double rotPower = Constants.kRotP * error;
-	
-			double leftPow = rotPower + straightPower;
-			double rightPow = rotPower - straightPower;
-			Robot.drive.setPower(leftPow, rightPow);
-		    } else {
-			m_counter++;
-		    }
-		} else {
-		    m_pathIsFinished = true;
-		}
+	if (m_counter < m_arcLength.size()) {
+	    if (Robot.drive.getDrivetrainTicks() < m_arcLength.get(m_counter)) {
+		// m_rotPID.setDesired(m_heading.get(m_counter));
+		// rotPow = m_rotPID.calculate(Robot.drive.getCurrentYaw());
+		// straightPow = m_distPID.calculate(Robot.drive.getDrivetrainPosition());
+
+		double robotAngle = (360 - Robot.drive.getCurrentYaw()) % 360;
+		double error = m_heading.get(m_counter) - robotAngle;
+		error = (error > 180) ? error - 360 : error;
+		error = (error < -180) ? error + 360 : error;
+		double straightPower = 0.8;
+		double rotPower = Constants.kRotP * error;
+
+		double leftPow = rotPower + straightPower;
+		double rightPow = rotPower - straightPower;
+		Robot.drive.setPower(leftPow, rightPow);
+	    } else {
+		m_counter++;
+	    }
+	} else {
+	    m_pathIsFinished = true;
+	}
     }
 
     @Override
     protected boolean isFinished() {
-    	return m_pathIsFinished || Robot.drive.getDrivetrainTicks() <= m_arcLength.get(m_arcLength.size() - 1);
+	return m_pathIsFinished || Robot.drive.getDrivetrainTicks() >= m_arcLength.get(m_arcLength.size() - 1);
     }
 
     @Override
     protected void end() {
-		Robot.drive.stopDrive();
-		m_path.clearAll();
+	Robot.drive.stopDrive();
+	m_path.clearAll();
     }
 
     @Override
     protected void interrupted() {
-    	end();
+	end();
     }
 
 }
