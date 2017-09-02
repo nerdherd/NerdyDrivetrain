@@ -1,7 +1,5 @@
 package com.team687.frc2017;
 
-import com.team687.frc2017.utilities.Waypoint;
-
 /**
  * Important constants
  * 
@@ -14,16 +12,21 @@ public class Constants {
     public final static double kDriveFeetToEncoderUnitsR = 4.388 * 3 / (Math.PI);
     public final static double kDriveFeetToEncoderUnitsL = 4.487 * 3 / (Math.PI);
     public final static double kWheelDiameter = 0; // in inches
+    public final static double kDrivebaseWidth = 0; // in inches
 
     // Distance PID
     public final static double kDistF = 0;
     public final static double kDistP = 0.001;
     public final static double kDistI = 0;
     public final static double kDistD = 0;
-    public final static double kMinDistPower = 0;
-    public final static double kMaxDistPower = 1.0;
+    public final static double kMinDistPowerLowGear = 0;
+    public final static double kMaxDistPowerLowGear = 1.0;
     public final static double kDriveDistanceTolerance = 205.6;
     public final static double kDriveDistanceOscillationCount = 5;
+
+    public final static double kDistPHighGear = 0.001;
+    public final static double kMinDistPowerHighGear = 0;
+    public final static double kMaxDistPowerHighGear = 1.0;
 
     // Rotation PID
     public final static double kRotPLowGear = 0.015;
@@ -35,7 +38,7 @@ public class Constants {
     public final static double kDriveRotationDeadband = 0.5;
     public final static int kDriveRotationCounter = 3;
 
-    public final static double kRotPHighGear = 0;
+    public final static double kRotPHighGear = 0.05;
     public final static double kMinRotPowerHighGear = 0.254;
     public final static double kMaxRotPowerHighGear = 1.0;
 
@@ -59,10 +62,12 @@ public class Constants {
     public final static double kJoystickDeadband = 0.02;
 
     // Bezier Curves
-    public final static double kBezierStep = 30;
-    public final static double kRotPBezier = 0;
-    public final static double kBezierMinStraightPow = 0.1241;
-    public final static double kBezierMaxStraightPow = 0.5172;
+    public final static double kBezierStep = 60;
+    public final static double kRotPBezier = 0.03;
+    public final static double kDistPBezier = 0.001;
+    public final static double kMaxStraightPower = 0.75;
+    public final static double kStraightPowerAdjuster = 0.5; // the higher this is, the slower the robot will
+							     // go during a sharp turn
 
     // Paths
     public final static double[] RedPathWallToPeg = { 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -79,26 +84,18 @@ public class Constants {
     public final static double[] RedPathWallToHopper2056 = { 0, 0, 0, 0, 0, 0, 0, 0 };
     public final static double RedPathDistanceAlignWithHopper = 0;
 
-    // placeholder path from Simbot2017
-    public final static Waypoint[] SimRedPathWallToHopper = new Waypoint[] { new Waypoint(0, 0, 90),
-	    new Waypoint(0, 3.85, 90), new Waypoint(-6.66, 11.25, 90), new Waypoint(-7.55, 11.35, 180) };
-
-    public final static double[] BluePathWallToPeg = { 0, 0, 0, 0, 0, 0, 0, 0 };
-    public final static double[] BluePathPegToHopper = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    public final static double[] BluePathWallToPeg = { 0, 0, 0, 81, 0, 81, 65.31, 118.5 };
+    public final static double[] BluePathPegToHopper = { 65.31, 118.5, 0, 76, 0, 174, -29.7, 103.24 };
     public final static double BluePathHopperToBoilerAngle = 0;
 
-    public final static double[] BluePathWallToHopper973 = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    public final static double[] BluePathWallToHopper973 = { 0, 0, 0, 100300, 0, 100300, -48000, 100900 };
     public final static double BluePathWallToHopperInitialDistance = 0;
-    public final static double BluePathWallToHopperArcTurnAngle = 0;
-    public final static double BlueHopperBackUpDistance = -0;
-    public final static double BlueHopperAngleToShoot = 0;
+    public final static double BluePathWallToHopperArcTurnAngle = 86;
+    public final static double BlueHopperBackUpDistance = -20000;
+    public final static double BlueHopperAngleToShoot = 67;
 
     public final static double[] BluePathWallToHopper1678 = { 0, 0, 0, 0, 0, 0, 0, 0 };
-    public final static double[] BluePathWallToHopper2056 = { 0, 0, 0, 0, 0, 0, 0, 0 };
-    public final static double BluePathDistanceAlignWithHopper = 0;
-
-    // placeholder path from Simbot2017
-    public final static Waypoint[] SimBluePathWallToHopper = new Waypoint[] { new Waypoint(0, 0, 90),
-	    new Waypoint(0, 3.85, 90), new Waypoint(-6.66, 11.25, 90), new Waypoint(-7.55, 11.35, 180) };
+    public final static double[] BluePathWallToHopper2056 = { 0, 0, -39000, 40000, -39000, 64000, -39000, 101000 };
+    public final static double BluePathDistanceAlignWithHopper = 20000;
 
 }
