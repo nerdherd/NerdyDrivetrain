@@ -12,7 +12,7 @@ public class Constants {
     public final static double kDriveFeetToEncoderUnitsR = 4.388 * 3 / (Math.PI);
     public final static double kDriveFeetToEncoderUnitsL = 4.487 * 3 / (Math.PI);
     public final static double kWheelDiameter = 0; // in inches
-    public final static double kDrivebaseWidth = 0; // in inches
+    public final static double kDrivetrainWidth = 36; // in inches
 
     // Distance PID
     public final static double kDistF = 0;
@@ -65,38 +65,45 @@ public class Constants {
     public final static double kBezierStep = 60;
     public final static double kRotPBezier = 0.03;
     public final static double kDistPBezier = 0.001; // look at TODO on how to tune this
+						     // the higher this is, the less time to decelerate
     public final static double kMaxStraightPower = 0.75;
-    public final static double kMinStraightPower = 0.33; // ensure that the robot gets to end point with softStops
+    public final static double kMinStraightPower = 0.25; // ensure that the robot gets to end point with softStops
     public final static double kStraightPowerAdjuster = 0.5; // the higher this is, the slower the robot will
 							     // go during a sharp turn
 
     // Paths
     public final static double[] RedPathWallToPeg = { 0, 0, 0, 0, 0, 0, 0, 0 };
     public final static double[] RedPathPegToHopper = { 0, 0, 0, 0, 0, 0, 0, 0 };
-    public final static double RedPathHopperToBoilerAngle = 0;
+    public final static double RedHopperToBoilerCorrectingAngle = 0;
 
     public final static double[] RedPathWallToHopper973 = { 0, 0, 0, 0, 0, 0, 0, 0 };
-    public final static double RedPathWallToHopperInitialDistance = 0;
-    public final static double RedPathWallToHopperArcTurnAngle = 0;
+    public final static double RedWallToHopperInitialDistance = 0;
+    public final static double RedWallToHopperArcTurnAngle = 0;
     public final static double RedHopperBackUpDistance = -0;
-    public final static double RedHopperAngleToShoot = 0;
+    public final static double RedHopperToBoilerAngle = 0;
 
     public final static double[] RedPathWallToHopper1678 = { 0, 0, 0, 0, 0, 0, 0, 0 };
     public final static double[] RedPathWallToHopper2056 = { 0, 0, 0, 0, 0, 0, 0, 0 };
     public final static double RedPathDistanceAlignWithHopper = 0;
 
-    public final static double[] BluePathWallToPeg = { 0, 0, 0, 81, 0, 81, 65.31, 118.5 };
-    public final static double[] BluePathPegToHopper = { 65.31, 118.5, 0, 76, 0, 174, -29.7, 103.24 };
-    public final static double BluePathHopperToBoilerAngle = 0;
+    public final static double[] BluePathWallToPeg = { 0, 0, 0, 92278.44, 0, 92278.44, 74403.76, 134999.94 };
+    public final static double[] BluePathPegToHopper = { 74403.7644, 134999.94, 0, 86582.24, 0, 198227.76, -33835.428,
+	    117615.1376 };
+    public final static double BlueHopperToBoilerCorrectingAngle = 0;
 
     public final static double[] BluePathWallToHopper973 = { 0, 0, 0, 100300, 0, 100300, -48000, 100900 };
-    public final static double BluePathWallToHopperInitialDistance = 0;
-    public final static double BluePathWallToHopperArcTurnAngle = 86;
+    public final static double BlueWallToHopperInitialDistance = 0;
+    public final static double BlueWallToHopperArcTurnAngle = 86;
     public final static double BlueHopperBackUpDistance = -20000;
-    public final static double BlueHopperAngleToShoot = 67;
+    public final static double BlueHopperToBoilerAngle = 67;
 
     public final static double[] BluePathWallToHopper1678 = { 0, 0, 0, 0, 0, 0, 0, 0 };
     public final static double[] BluePathWallToHopper2056 = { 0, 0, -39000, 40000, -39000, 64000, -39000, 101000 };
     public final static double BluePathDistanceAlignWithHopper = 20000;
+
+    public final static double BlueWallToCenterPegDistance = -0;
+    public final static double BlueCenterPegBackUpDistance = 0;
+    public final static double BlueWallToSecondGearAngle = 90;
+    public final static double BlueWallToSecondGearDistance = -0;
 
 }
