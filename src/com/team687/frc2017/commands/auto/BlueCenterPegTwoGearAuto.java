@@ -10,30 +10,30 @@ import com.team687.frc2017.commands.WaitTime;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
- * Two gear center peg auto
+ * Blue two gear center peg auto
  * 
  * @author tedlin
  *
  */
 
-public class BlueCenterGearTwoGearAuto extends CommandGroup {
+public class BlueCenterPegTwoGearAuto extends CommandGroup {
 
-    public BlueCenterGearTwoGearAuto() {
+    public BlueCenterPegTwoGearAuto() {
 	addSequential(
 		new DriveDistancePID(Constants.BlueWallToCenterPegDistance, Constants.BlueWallToCenterPegDistance));
 	// addSequential(new DeployGear());
 	addSequential(
 		new DriveDistancePID(Constants.BlueCenterPegBackUpDistance, Constants.BlueCenterPegBackUpDistance));
 
-	addSequential(new WaitTime(0.4));
-	addSequential(new TurnToAngle(Constants.BlueWallToSecondGearAngle, 4, true));
-	addSequential(new WaitTime(0.4));
-	addSequential(
-		new DriveDistancePID(Constants.BlueWallToSecondGearDistance, Constants.BlueWallToSecondGearDistance));
+	addSequential(new WaitTime(0.3));
+	addSequential(new TurnToAngle(Constants.BlueWallCenterToSecondGearAngle, 4, true));
+	addSequential(new WaitTime(0.3));
+	addSequential(new DriveDistancePID(Constants.BlueWallCenterToSecondGearDistance,
+		Constants.BlueWallCenterToSecondGearDistance));
 	// addParallel(new IntakeGear());
 
-	addSequential(
-		new DriveDistancePID(-Constants.BlueWallToSecondGearDistance, -Constants.BlueWallToSecondGearDistance));
+	addSequential(new DriveDistancePID(-Constants.BlueWallCenterToSecondGearDistance,
+		-Constants.BlueWallCenterToSecondGearDistance));
 	// addParallel(new GearManipUp());
 	addSequential(new WaitTime(0.2));
 	addSequential(new TurnToAngle(0, 4, true));

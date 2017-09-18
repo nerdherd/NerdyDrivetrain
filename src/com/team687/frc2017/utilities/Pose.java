@@ -12,6 +12,7 @@ public class Pose {
     private double m_x;
     private double m_y;
     private double m_theta;
+    private double m_timestamp;
 
     public Pose(double x, double y, double theta) {
 	m_x = x;
@@ -29,6 +30,10 @@ public class Pose {
 
     public void setTheta(double theta) {
 	m_theta = theta;
+    }
+
+    public void setTimestamp(double timestamp) {
+	m_timestamp = timestamp;
     }
 
     public double getX() {
@@ -49,6 +54,10 @@ public class Pose {
     public Matrix getMatrix() {
 	double[][] A = { { m_x }, { m_y }, { m_theta } };
 	return new Matrix(A);
+    }
+
+    public double getTimestamp() {
+	return m_timestamp;
     }
 
 }

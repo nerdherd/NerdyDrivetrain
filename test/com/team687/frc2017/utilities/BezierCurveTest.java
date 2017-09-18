@@ -14,7 +14,6 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import com.team687.frc2017.Constants;
-import com.team687.frc2017.utilities.BezierCurve;
 
 /**
  * Bezier curve/path unit testing
@@ -30,7 +29,7 @@ public class BezierCurveTest {
     @Parameters
     public static Collection testCases() {
 	return Arrays.asList(new double[][] { Constants.BluePathWallToHopper1678, Constants.BluePathWallToHopper2056,
-		Constants.BluePathWallToHopper973, Constants.BluePathWallToPeg, Constants.BluePathPegToHopper });
+		Constants.BluePathWallToHopper973, Constants.BluePathWallToClosePeg, Constants.BluePathPegToHopper });
     }
 
     private double[] m_path;
@@ -92,8 +91,8 @@ public class BezierCurveTest {
 	    double leftPower = straightPower + rotPower;
 	    double rightPower = straightPower - rotPower;
 
-	    assertTrue(0.0 <= leftPower && leftPower <= 1.0);
-	    assertTrue(0.0 <= rightPower && rightPower <= 1.0);
+	    assertTrue(-0.5 <= leftPower && leftPower <= 1.0);
+	    assertTrue(-0.5 <= rightPower && rightPower <= 1.0);
 	}
     }
 
